@@ -1,0 +1,215 @@
+{
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "gcpe-news-proxy",
+    "annotations": {
+      "description": "",
+      "tags": "csharp",
+      "iconClass": "icon-nodejs"
+    }
+  },
+  "labels": {
+    "template": "csharp"
+  },
+  "objects": [  
+  {
+      "kind": "Secret",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "news-proxy-secrets"
+      },
+      "stringData" : {
+        "password-keys" : "${PASSWORDKEYS}"
+      }
+    },
+{
+    "kind": "DeploymentConfig",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "news-proxy",
+        "generation": 1,
+        "creationTimestamp": null,
+        "labels": {
+            "app": "news-proxy"
+        }
+    },
+    "spec": {
+        "strategy": {
+            "type": "Rolling",
+            "rollingParams": {
+                "updatePeriodSeconds": 1,
+                "intervalSeconds": 1,
+                "timeoutSeconds": 600,
+                "maxUnavailable": "25%",
+                "maxSurge": "25%"
+            },
+            "resources": {},
+            "activeDeadlineSeconds": 21600
+        },
+        "triggers": [
+            {
+                "type": "ImageChange",
+                "imageChangeParams": {
+                    "automatic": true,
+                    "containerNames": [
+                        "news-proxy"
+                    ],
+                    "from": {
+                        "kind": "ImageStreamTag",
+                        "namespace": "${APP_IMAGE_NAMESPACE}",
+                        "name": "news-proxy:${DEPLOYMENT_TAG}"
+                    }
+                }
+            },
+            {
+                "type": "ConfigChange"
+            }
+        ],
+        "replicas": 1,
+        "test": false,
+        "selector": {
+            "deploymentconfig": "news-proxy"
+        },
+        "template": {
+            "metadata": {
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "news-proxy",
+                    "deploymentconfig": "news-proxy"
+                }
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "name": "news-proxy",
+						"env": [
+                            {
+                                "name": "RefererAllowedDomains",
+                                "value": "${REFERER_ALLOWED_DOMAINS}"
+                            },
+                            {
+                                "name": "EnableRefererHeaderFilter",
+                                "value": "true"
+                            },
+                            {
+                                "name": "EnableCryptoMode",
+                                "value": "true"
+                            },
+                            {
+                                "name": "PasswordKeys",
+								"valueFrom": {
+                                  "secretKeyRef" : {
+                                     "name" : "news-proxy-secrets",
+                                     "key" : "password-keys"
+                                    }
+							    }
+                            },
+                            {
+                                "name": "AllowedHosts",
+                                "value": "youtube.com,staticflickr.com,twimg.com,fbcdn.net,gov.bc.ca"
+                            }
+                        ],
+                        "ports": [
+                            {
+                                "containerPort": 8080,
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "resources": {
+                            "limits": {
+                                "cpu": "2",
+                                "memory": "4Gi"
+                            },
+                            "requests": {
+                                "cpu": "10m",
+                                "memory": "512Mi"
+                            }
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "imagePullPolicy": "Always"
+                    }
+                ],
+                "restartPolicy": "Always",
+                "terminationGracePeriodSeconds": 30,
+                "dnsPolicy": "ClusterFirst",
+                "securityContext": {},
+                "schedulerName": "default-scheduler"
+            }
+        }
+    },
+    "status": {
+        "latestVersion": 0,
+        "observedGeneration": 0,
+        "replicas": 0,
+        "updatedReplicas": 0,
+        "availableReplicas": 0,
+        "unavailableReplicas": 0
+    }
+},
+{
+    "kind": "Service",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "news-proxy",
+        "creationTimestamp": null,
+        "labels": {
+            "app": "news-proxy"
+        }
+    },
+    "spec": {
+        "ports": [
+            {
+                "name": "8080-tcp",
+                "protocol": "TCP",
+                "port": 8080,
+                "targetPort": 8080
+            }
+        ],
+        "selector": {
+            "deploymentconfig": "news-proxy"
+        },
+        "type": "ClusterIP",
+        "sessionAffinity": "None"
+    },
+    "status": {
+        "loadBalancer": {}
+    }
+}
+],
+  "parameters": [
+    {
+      "name": "REFERER_ALLOWED_DOMAINS",
+      "displayName": "Referer allowed domains",
+      "required": true,
+      "description": "Comma seperated list of allowed referer domains"
+    },
+	{
+      "name": "PASSWORDKEYS",
+      "displayName": "Password Keys",
+      "required": true,
+      "description": "Comma seperated list of password keys"
+    },
+    {
+      "name": "APP_IMAGE_NAMESPACE",
+      "displayName": "App Image Namespace",
+      "required": true,
+      "description": "The OpenShift Namespace where the ImageStream resides.",
+      "value": "gcpe-news-tools"
+    },
+	{
+      "name": "DEPLOYMENT_TAG",
+      "displayName": "Deployment Tag",
+      "required": true,
+      "description": "The OpenShift tag that is associated with this deployment.",
+      "value": "dev"
+    },
+	{
+      "name": "APPLICATION_DOMAIN",
+      "displayName": "Application Domain",
+      "description": "The suffix for the application routes.  Defaults to .pathfinder.gov.bc.ca",
+      "value": ".pathfinder.gov.bc.ca"
+    }
+	]
+}

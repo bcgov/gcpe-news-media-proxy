@@ -1,0 +1,166 @@
+
+{
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata":
+  {
+    "name": "news-proxy-build",
+    "annotations":
+    {
+      "description": "Contains build objects",
+      "tags": "aspnetcore",
+      "iconClass": "icon-github"
+    }
+  },
+  "labels":
+  {
+    "template": "news-proxy-build"
+  },
+  "objects": [ 
+    {
+    "kind": "ImageStream",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "news-proxy",
+        "generation": 1,
+        "creationTimestamp": null,
+        "labels": {
+            "app": "news-proxy"
+        },
+        "annotations": {
+            "openshift.io/generated-by": "OpenShiftNewApp"
+        }
+    },
+    "spec": {
+        "lookupPolicy": {
+            "local": false
+        }
+    },
+    "status": {
+        "dockerImageRepository": ""
+    }
+},
+{
+    "kind": "BuildConfig",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "news-proxy",
+        "creationTimestamp": null,
+        "labels": {
+            "app": "news-proxy"
+        }
+    },
+    "spec": {
+        "triggers": [
+            {
+                "type": "GitHub",
+                "github": {
+                    "secret": "3XtnspHIC8mT7UdgI8hT"
+                }
+            },
+            {
+                "type": "Generic",
+                "generic": {
+                    "secret": "S9eYwKjY8a-hCGo-JSsC"
+                }
+            },
+            {
+                "type": "ImageChange",
+                "imageChange": {}
+            },
+            {
+                "type": "ConfigChange"
+            }
+        ],
+        "runPolicy": "Serial",
+        "source": {
+            "type": "Git",
+            "git": {
+                "uri": "${SOURCE_REPOSITORY_URL}"
+            }
+        },
+        "strategy": {
+            "type": "Source",
+            "sourceStrategy": {
+                "from": {
+                    "kind": "ImageStreamTag",
+                    "name": "dotnet-20-rhel7:latest"
+                },
+                "env": [
+                    {
+                        "name": "DOTNET_STARTUP_PROJECT",
+                        "value": "Gov.News.Media.Website"
+                    }
+                ]
+            }
+        },
+		 "output": {
+            "to": {
+                "kind": "ImageStreamTag",
+                "name": "news-proxy:latest"
+            }
+        },
+        "output": {},
+        "resources": {},
+        "postCommit": {},
+        "nodeSelector": null,
+        "successfulBuildsHistoryLimit": 5,
+        "failedBuildsHistoryLimit": 5
+    },
+    "status": {
+        "lastVersion": 0
+    }
+}
+
+
+  ],
+  "parameters": [
+    {
+      "name": "APPLICATION_NAME",
+      "displayName": "Application Name",
+      "description": "The name given to the application",
+      "required": true,
+      "value": "news-proxy"
+    },
+    {
+      "name": "BUILD_PROJECT",
+      "displayName": "Build Project",
+      "description": "The openshift project where builds and target images are stored.",
+      "required": true,
+      "value": "gcpe-news-tools"
+    },
+    {
+      "name": "DEPLOYMENT_TYPE",
+      "displayName": "Deployment Type",
+      "description": "The name assigned to the imagestreams defined in this template.",
+      "required": true,
+      "value": "latest"
+    },
+    {
+      "name": "SOURCE_REPOSITORY_URL",
+      "displayName": "Source Repository",
+      "description": "The source repository to use for the builds.",
+      "required": true,
+      "value": "https://github.com/bcgov/gcpe-news-media-proxy.git"
+    },	
+    {
+      "name": "GIT_REFERENCE",
+      "displayName": "Git Reference",
+      "description": "Optional branch, tag, or commit.",
+      "required": true,
+      "value": "master"
+    },
+	{
+      "name": "DATABASE_VOLUME_CAPACITY",
+      "displayName": "Database volume capacity",
+      "description": "Size of the database used for SonarQube",
+      "value": "5Gi"
+    },
+	{
+      "name": "DATABASE_SERVICE_NAME",
+      "displayName": "Database service name",
+      "description": "Name of the database service",
+      "value": "postgresql-sonarqube"
+    }
+  ]
+}
