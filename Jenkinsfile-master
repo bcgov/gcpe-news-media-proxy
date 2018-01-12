@@ -1,0 +1,16 @@
+node('master') {
+    stage('Build') {
+        echo "Building..."
+        openshiftBuild bldCfg: 'news-proxy-master', showBuildLogs: 'true'
+        openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'news-proxy', srcTag: 'latest'
+		openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: 'test', srcStream: 'news-proxy', srcTag: '$BUILD_ID'
+    }	
+}
+
+stage('Deploy on Prod') {
+    input "Deploy to Prod?"
+    node('master') {
+        openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: 'prod', srcStream: 'news-proxy', srcTag: '$BUILD_ID'
+    }
+}
+
