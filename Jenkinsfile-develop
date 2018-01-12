@@ -1,0 +1,59 @@
+node('master') {
+    stage('Build') {
+        echo "Building..."
+        openshiftBuild bldCfg: 'news-proxy-develop', showBuildLogs: 'true'
+        openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'news-proxy', srcTag: 'latest'
+    }
+	
+    stage('Deploy on Dev') {
+        echo "Deploying to dev..."
+        openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: 'dev', srcStream: 'news-proxy', srcTag: '$BUILD_ID'
+	//Sleeping for a while to wait deployment completes
+	sh 'sleep 3m'
+    }
+
+}
+
+node('bddstack') {
+
+	stage('FT on Dev') {
+		//the checkout is mandatory, otherwise functional test would fail
+        echo "checking out source"
+        echo "Build: ${BUILD_ID}"
+        checkout scm
+        dir('functional-tests') {
+	    try {
+                sh './gradlew --debug --stacktrace chromeHeadlessTest'
+	    } finally {
+		        archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
+                archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
+                junit 'build/test-results/**/*.xml'
+                publishHTML (target: [
+                            allowMissing: false,
+                            alwaysLinkToLastBuild: false,
+                            keepAll: true,
+                            reportDir: 'build/reports/spock',
+                            reportFiles: 'index.html',
+                            reportName: "BDD Spock Report"
+                        ])
+                publishHTML (target: [
+                            allowMissing: false,
+                            alwaysLinkToLastBuild: false,
+                            keepAll: true,
+                            reportDir: 'build/reports/tests/chromeHeadlessTest',
+                            reportFiles: 'index.html',
+                            reportName: "Full Test Report"
+                        ])        
+	    }
+        }
+    }
+}
+
+stage('Deploy on Test') {
+    input "Deploy to test?"
+    node('master') {
+        openshiftTag destStream: 'gwells', verbose: 'true', destTag: 'test', srcStream: 'gwells', srcTag: '$BUILD_ID'
+	sh 'sleep 3m'
+    }
+}
+
