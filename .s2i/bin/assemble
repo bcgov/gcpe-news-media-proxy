@@ -87,9 +87,25 @@ for TEST_PROJECT in $DOTNET_TEST_PROJECTS; do
     dotnet test "$TEST_PROJECT" -f "$DOTNET_FRAMEWORK"
 done
 
+# get the text after the last dash in the openshift build name.
+BUILDNUMBER=${OPENSHIFT_BUILD_NAME##*-} 
+if [ -z $VERSION_PREFIX ]; then
+  VERSION_PREFIX=1.0.0
+fi
+
 # publish application
 echo "---> Restoring application dependencies..."
 dotnet restore "$DOTNET_STARTUP_PROJECT" $RESTORE_OPTIONS
+
+if [ -n "$SONAR_TOKEN" ]; then
+echo "---> Running SonarQube Scan..."
+mono /usr/lib/sonar-scanner/SonarQube.Scanner.MSBuild.exe begin /d:sonar.login=$SONAR_TOKEN /k:$SONAR_PROJECT /d:sonar.host.url=$SONAR_URL /v:$VERSION_PREFIX$BUILDNUMBER 
+dotnet build "$DOTNET_STARTUP_PROJECT" -f "$DOTNET_FRAMEWORK" -c "$DOTNET_CONFIGURATION" 
+mono /usr/lib/sonar-scanner/SonarQube.Scanner.MSBuild.exe end /d:sonar.login=$SONAR_TOKEN 
+	
+fi
+
+
 echo "---> Publishing application..."
 dotnet publish "$DOTNET_STARTUP_PROJECT" -f "$DOTNET_FRAMEWORK" -c "$DOTNET_CONFIGURATION" \
        --self-contained false /p:PublishWithAspNetCoreTargetManifest=$DOTNET_ASPNET_STORE -o "$DOTNET_APP_PATH"

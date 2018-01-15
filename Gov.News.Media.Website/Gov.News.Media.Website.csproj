@@ -8,6 +8,7 @@
     <PackageId>Gov.News.Media.Website</PackageId>
     <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
     <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+	<ProjectGuid>{FAEBC81B-55E1-4175-9554-7607EDA07F01}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
