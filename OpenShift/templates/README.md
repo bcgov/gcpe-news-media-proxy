@@ -83,11 +83,24 @@ You can now trigger deployments.
 If any builds or deployments fail, you can use the events view to see detailed errors.
 
 
-
-
 OpenShift Origin Notes
 ----------------------
 When deploying to OpenShift Origin on a laptop or personal computer, there are some considerations to keep in mind.
+
+### Base Images ###
+
+If you do not have a RHEL subscription, you can use the Centos dotnet image.  First, import them using the following command:
+
+`oc create -f dotnet_imagestreams_centos.json`
+
+Then adjust builds that use the RHEL dotnet image to use dotnet-runtime.
+
+### Build Resources ###
+
+If you have less than 2 CPU Cores and 6 GB of RAM available to your OpenShift Origin instance, you will need to reduce the build resources.  Edit each build and replace the resources tag with yaml:  `resources: {}`
+
+### Router Timeout ###
+
 
 Depending on your computer's hardware performance, you may need to increase the OpenShift timeout for communication.
 
