@@ -90,7 +90,7 @@ namespace Gov.News.Media.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogCritical("An unexpected error occurred  Please, check for infrastructure issues such as filesystem IO access or malformatted config files. ex);
+                _logger.LogCritical("Configuration error - please check application configuration", ex);
                 throw; // 500 Internal Server Error
             }
         }
