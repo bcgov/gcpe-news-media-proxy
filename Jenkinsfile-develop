@@ -1,5 +1,11 @@
 node('master') {
-    stage('Build') {
+
+    stage('Code Quality') {
+        echo "Running SonarQube static code analysis."
+        openshiftBuild bldCfg: 'news-proxy-sonar-develop', showBuildLogs: 'true'
+    }
+
+    stage('Build Image') {
         echo "Building..."
         openshiftBuild bldCfg: 'news-proxy-develop', showBuildLogs: 'true'
         openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'news-proxy', srcTag: 'latest'
@@ -9,7 +15,7 @@ node('master') {
         echo "Deploying to dev..."
         openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: 'dev', srcStream: 'news-proxy', srcTag: '$BUILD_ID'
 	//Sleeping for a while to wait deployment completes
-	sh 'sleep 3m'
+	sh 'sleep 1m'
     }
 }
 
