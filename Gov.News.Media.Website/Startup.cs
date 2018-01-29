@@ -6,11 +6,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.HealthChecks;
 using Microsoft.Extensions.Logging;
-using Serilog;
-using Serilog.Core;
-using Serilog.Sinks.RollingFile;
+using System.Threading.Tasks;
 
 namespace Gov.News.Media.Website
 {
@@ -26,8 +24,6 @@ namespace Gov.News.Media.Website
             Configuration = builder.Build();
 
             var logFile = Configuration.GetSection("Logging").GetSection("LogFile").Value;
-            var levelSwitch = new LoggingLevelSwitch(Serilog.Events.LogEventLevel.Warning);
-            Log.Logger = new LoggerConfiguration().MinimumLevel.ControlledBy(levelSwitch).WriteTo.RollingFile(logFile).CreateLogger();
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -44,6 +40,12 @@ namespace Gov.News.Media.Website
             // Add the Configuration object so that controllers may use it through dependency injection
             services.AddSingleton<IConfiguration>(Configuration);
             services.Configure<Settings>(options => Configuration.GetSection("Settings").Bind(options));
+
+            services.AddHealthChecks(checks =>
+            {
+                checks.AddValueTaskCheck("HTTP Endpoint", () => new
+                    ValueTask<IHealthCheckResult>(HealthCheckResult.Healthy("Ok")));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,8 +53,6 @@ namespace Gov.News.Media.Website
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
-            loggerFactory.AddSerilog();
             
             app.UseStaticFiles();
 

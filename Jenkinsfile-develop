@@ -15,7 +15,7 @@ node('master') {
         echo "Deploying to dev..."
         openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: 'dev', srcStream: 'news-proxy', srcTag: '$BUILD_ID'
 	//Sleeping for a while to wait deployment completes
-	sh 'sleep 3m'
+	sh 'sleep 1m'
     }
 }
 
