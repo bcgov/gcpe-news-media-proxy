@@ -14,8 +14,6 @@ node('master') {
     stage('Deploy on Dev') {
         echo "Deploying to dev..."
         openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: 'dev', srcStream: 'news-proxy', srcTag: '$BUILD_ID'
-	//Sleeping for a while to wait deployment completes
-	sh 'sleep 1m'
     }
 }
 
@@ -23,7 +21,6 @@ stage('Deploy on Test') {
     input "Deploy to test?"
     node('master') {
         openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: 'test', srcStream: 'news-proxy', srcTag: '$BUILD_ID'
-	sh 'sleep 3m'
     }
 }
 
