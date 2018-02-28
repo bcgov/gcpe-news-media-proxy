@@ -51,28 +51,6 @@
       }
     },
     {
-      "kind": "Route",
-      "apiVersion": "v1",
-      "metadata":
-      {
-        "name": "${NAME}"
-      },
-      "spec":
-      {
-        "host": "${APPLICATION_DOMAIN}",
-        "to":
-        {
-          "kind": "Service",
-          "name": "${NAME}",
-          "weight": 100
-        },
-        "port":
-        {
-          "targetPort": "8080-tcp"
-        }
-      }
-    },
-    {
       "kind": "DeploymentConfig",
       "apiVersion": "v1",
       "metadata":
@@ -169,7 +147,7 @@
 					},
 					{
 						"name": "AllowedHosts",
-						"value": "youtube.com,staticflickr.com,twimg.com,fbcdn.net,gov.bc.ca"
+						"value": "${ALLOWED_HOSTS}"
 					}
 				],
                 "resources":
@@ -287,14 +265,21 @@
       "displayName": "Referer allowed domains",
       "required": true,
       "description": "Comma separated list of allowed referer domains",
-	  "changeme"
+	  "value": "changeme"
     },
 	{
       "name": "PASSWORDKEYS",
       "displayName": "Password Keys",
       "required": true,
       "description": "Comma separated list of password keys",
-	  "changeme"
+	  "value": "changeme"
+    },	
+	{
+      "name": "ALLOWED_HOSTS",
+      "displayName": "Allowed Hosts",
+      "required": true,
+      "description": "youtube.com,staticflickr.com,twimg.com,fbcdn.net,gov.bc.ca",
+	  "value": "youtube.com,staticflickr.com,twimg.com,fbcdn.net,gov.bc.ca"
     }
 	
   ]
