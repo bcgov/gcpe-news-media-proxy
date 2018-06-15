@@ -16,8 +16,8 @@ namespace Gov.News.Media.Website
                 .ConfigureLogging((hostingContext, logging) =>
                 {
                     logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                    logging.AddConsole(options => options.IncludeScopes = true);
-                    logging.SetMinimumLevel(LogLevel.Debug);
+                    logging.AddConsole(/*options => options.IncludeScopes = true*/);
+                    //logging.SetMinimumLevel(LogLevel.Debug);
                     logging.AddDebug();
                     logging.AddEventSourceLogger();
                 })
