@@ -15,11 +15,11 @@ namespace Gov.News.Media.Website
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureLogging((hostingContext, logging) =>
                 {
-                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                    logging.AddConsole(/*options => options.IncludeScopes = true*/);
+                    // logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    // logging.AddConsole(/*options => options.IncludeScopes = true*/);
                     //logging.SetMinimumLevel(LogLevel.Debug);
-                    logging.AddDebug();
-                    logging.AddEventSourceLogger();
+                    // logging.AddDebug();
+                    // logging.AddEventSourceLogger();
                 })
                 .UseIISIntegration()
                 .UseStartup<Startup>()
