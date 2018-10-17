@@ -1,4 +1,5 @@
-﻿using Gov.News.Media.Model;
+﻿using System.Threading.Tasks;
+using Gov.News.Media.Model;
 using Gov.News.Media.Services;
 using Gov.News.Media.Website.Attributes;
 using Microsoft.AspNetCore.Builder;
@@ -9,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.HealthChecks;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace Gov.News.Media.Website
 {
