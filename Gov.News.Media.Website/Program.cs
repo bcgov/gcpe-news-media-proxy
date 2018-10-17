@@ -1,8 +1,8 @@
-﻿using System.IO;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+
 
 namespace Gov.News.Media.Website
 {
