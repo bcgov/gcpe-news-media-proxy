@@ -1,14 +1,15 @@
-﻿using Gov.News.Media.Model;
+﻿using System.Threading.Tasks;
+using Gov.News.Media.Model;
 using Gov.News.Media.Services;
 using Gov.News.Media.Website.Attributes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.HealthChecks;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace Gov.News.Media.Website
 {
@@ -32,7 +33,8 @@ namespace Gov.News.Media.Website
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSingleton<CacheService>();
             services.AddSingleton<MediaService>();

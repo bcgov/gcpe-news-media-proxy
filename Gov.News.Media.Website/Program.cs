@@ -1,7 +1,8 @@
 ﻿using System.IO;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Hosting;
+
 
 namespace Gov.News.Media.Website
 {
@@ -9,7 +10,12 @@ namespace Gov.News.Media.Website
     {
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder()
+            CreateWebHostBuilder(args).Build().Run();
+        }
+
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args)
                 .UseKestrel()
                 .UseHealthChecks("/hc")
                 .UseContentRoot(Directory.GetCurrentDirectory())
@@ -22,10 +28,7 @@ namespace Gov.News.Media.Website
                     // logging.AddEventSourceLogger();
                 })
                 .UseIISIntegration()
-                .UseStartup<Startup>()
-                .Build();
-
-            host.Run();
+                .UseStartup<Startup>();
         }
     }
 }
