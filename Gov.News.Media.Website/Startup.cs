@@ -45,9 +45,8 @@ namespace Gov.News.Media.Website
 
             services.AddHealthChecks(checks =>
             {
-                //checks.AddValueTaskCheck("HTTP Endpoint", () => new
-                //    ValueTask<IHealthCheckResult>(HealthCheckResult.Healthy("Ok")));
-                checks.AddUrlCheck("https://www.google.com");
+                checks.AddValueTaskCheck("HTTP Endpoint", () => new
+                    ValueTask<IHealthCheckResult>(HealthCheckResult.Healthy("Ok")));
             });
         }
 
