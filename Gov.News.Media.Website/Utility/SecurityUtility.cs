@@ -22,9 +22,9 @@ namespace Gov.News.Media.Website.Utility
         /// Verify that the host domain name is in a sub-domain of the white listed hosts
         /// </summary>
         /// <returns></returns>
-        public static bool IsAllowedHost(string hostName, string[] allowedHosts)
+        public static bool IsAllowedHost(string hostName, string[] allowedMediaHosts)
         {
-            foreach (var allowed in allowedHosts)
+            foreach (var allowed in allowedMediaHosts)
                 if (hostName.EndsWith('.' + allowed))
                     return true;
 

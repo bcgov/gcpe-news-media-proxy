@@ -72,7 +72,7 @@
         "AssetsCacheFolder": "..\\..\\Cache", 
 
 		//List of allowed subdomains for the proxy url
-        "AllowedHosts": [ "youtube.com", "staticflickr.com", "twimg.com", "fbcdn.net", "gov.bc.ca" ],
+        "AllowedMediaHosts": [ "youtube.com", "staticflickr.com", "twimg.com", "fbcdn.net", "gov.bc.ca" ],
 
 		//List of allowed Mime types to get from the external servers
         "AllowedContentType": [ "image/jpeg", "image/png", "image/gif" ],
