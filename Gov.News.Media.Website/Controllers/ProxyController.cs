@@ -52,7 +52,7 @@ namespace Gov.News.Media.Controllers
             {                
                 Uri uri;
 
-                string[] allowedHosts = _configuration["AllowedHosts"].Split(',');
+                string[] allowedHosts = _configuration["AllowedMediaHosts"].Split(',');
 
                 if (!VerifyUrlIfEncryptionMode(url, token) ||
                     !Uri.IsWellFormedUriString(url, UriKind.Absolute) ||
