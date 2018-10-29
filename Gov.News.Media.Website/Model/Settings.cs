@@ -4,7 +4,7 @@
     {
         public string AssetsCacheFolder { get; set; }
 
-        public string[] AllowedHosts { get; set; }
+        public string[] AllowedMediaHosts { get; set; }
 
         public string[] AllowedContentType { get; set; }
 
