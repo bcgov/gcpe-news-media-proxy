@@ -1,5 +1,5 @@
-FROM dotnet-20-rhel7:latest
-# This image provides a .NET Core 2.0 environment you can use to run your .NET
+FROM dotnet-22-rhel7:latest
+# This image provides a .NET Core environment you can use to run your .NET
 # applications.
 
 USER 0
