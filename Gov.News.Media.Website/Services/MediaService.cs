@@ -10,10 +10,10 @@ namespace Gov.News.Media.Services
     /// </summary>
     public class MediaService
     {
-        private IHostingEnvironment _appEnv;
+        private IWebHostEnvironment _appEnv;
         private Dictionary<string, string> _templates = new Dictionary<string, string>();
 
-        public MediaService(IHostingEnvironment appEnv)
+        public MediaService(IWebHostEnvironment appEnv)
         {                        
             _appEnv = appEnv;
             foreach (var name in new string[] { "youtube.html", "soundcloud.html", "facebook.html" })
