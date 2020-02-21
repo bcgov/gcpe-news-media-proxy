@@ -1,9 +1,9 @@
 node('master') {
 
-    /*stage('Code Quality') {
+    stage('Code Quality') {
         echo "Running SonarQube static code analysis."
         openshiftBuild bldCfg: 'news-proxy-sonar-develop', showBuildLogs: 'true'
-    }*/
+    }
 
     stage('Build Image') {
         echo "Building..."
