@@ -15,7 +15,7 @@ RUN pushd /opt \
     && yum install -y $INSTALL_PKGS \
     && rpm -V $INSTALL_PKGS \
     && yum clean all -y \
-    && curl -L https://github.com/SonarSource/sonar-scanner-msbuild/releases/download/4.0.2.892/sonar-scanner-msbuild-4.0.2.892.zip -o sonar-scanner-msbuild-4.0.2.892.zip \
+    && curl -L https://github.com/SonarSource/sonar-scanner-msbuild/releases/download/4.0.2.892/sonar-scanner-msbuild-4.6.0.1930.zip -o sonar-scanner-msbuild-4.0.2.892.zip \
     && mkdir /usr/lib/sonar-scanner  \
     && unzip sonar-scanner-msbuild-4.0.2.892.zip -d /usr/lib/sonar-scanner \
     && chmod -R a+rx /usr/lib/sonar-scanner \
