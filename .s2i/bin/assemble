@@ -96,7 +96,12 @@ fi
 # publish application
 echo "---> Restoring application dependencies..."
 dotnet restore "$DOTNET_STARTUP_PROJECT" $RESTORE_OPTIONS
-
+if [ -n "$SONAR_TOKEN" ]; then
+	echo "---> Running SonarQube Scan..."
+  	dotnet tool install --global dotnet-sonarscanner
+  	dotnet sonarscanner begin /d:sonar.login=$SONAR_TOKEN /k:"$SONAR_PROJECT" /d:sonar.host.url=$SONAR_URL
+  	dotnet build "$DOTNET_STARTUP_PROJECT" -f "$DOTNET_FRAMEWORK" -c "$DOTNET_CONFIGURATION"
+  	dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
 if [ -n "$SONAR_TOKEN" ]; then
 echo "---> Running SonarQube Scan..."
 mono /usr/lib/sonar-scanner/SonarQube.Scanner.MSBuild.exe begin /d:sonar.login=$SONAR_TOKEN /k:$SONAR_PROJECT /d:sonar.host.url=$SONAR_URL /v:$VERSION_PREFIX$BUILDNUMBER 
