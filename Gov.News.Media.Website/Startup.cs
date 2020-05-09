@@ -66,7 +66,7 @@ namespace Gov.News.Media.Website
             });
             app.UseFileServer(new FileServerOptions()
             {
-                RequestPath = new PathString("translations"),
+                RequestPath = new PathString("/translations"),
                 EnableDirectoryBrowsing = false
             });
 
