@@ -64,11 +64,6 @@ namespace Gov.News.Media.Website
                 RequestPath = new PathString(staticFiles.GetSection("RequestPath").Value),
                 EnableDirectoryBrowsing = false
             });
-            app.UseFileServer(new FileServerOptions()
-            {
-                RequestPath = new PathString("/translations"),
-                EnableDirectoryBrowsing = false
-            });
 
             app.UseMvc();
         }
