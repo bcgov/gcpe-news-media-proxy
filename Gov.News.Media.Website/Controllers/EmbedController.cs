@@ -33,7 +33,7 @@ namespace Gov.News.Media.Website.Controllers
         {
             try
             {
-                var mediaUrl = string.Format("//www.youtube-nocookie.com/embed/{0}?rel=0&amp;modestbranding=1&amp;wmode=transparent&amp;autoplay={1}", id, autoPlay.ToString().ToLower());
+                var mediaUrl = string.Format("//www.youtube-nocookie.com/embed/{0}?rel=0&amp;modestbranding=1&amp;enablejsapi=1&amp;wmode=transparent&amp;autoplay={1}", id, autoPlay.ToString().ToLower());
                 var data = _mediaService.ApplyTemplate("youtube.html", new Dictionary<string, string>() { { "###media-placeholder###", mediaUrl } });
 
                 return Content(data, "text/html");
