@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <RuntimeFrameworkVersion>3.1.1</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>3.1.9</RuntimeFrameworkVersion>
     <AssemblyName>Gov.News.Media.Website</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>Gov.News.Media.Website</PackageId>
