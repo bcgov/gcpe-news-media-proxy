@@ -1,5 +1,5 @@
-export PROJECT_NAMESPACE=${PROJECT_NAMESPACE:-gcpe-news}
-export GIT_URI=${GIT_URI:-"https://github.com/bcgov/gcpe-news-api-client.git"}
+export PROJECT_NAMESPACE=${PROJECT_NAMESPACE:-47ba99}
+export GIT_URI=${GIT_URI:-"https://github.com/bcgov/gcpe-news-media-proxy.git"}
 export GIT_REF=${GIT_REF:-"master"}
 
 # The templates that should not have their GIT references(uri and ref) over-ridden
