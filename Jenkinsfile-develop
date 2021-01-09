@@ -1,25 +1,33 @@
 node('master') {
-   /* stage('Code Quality') {
-        echo "Running SonarQube static code analysis."
-        openshiftBuild bldCfg: 'news-proxy-sonar-develop', showBuildLogs: 'true'
-    }*/
 
     stage('Build Image') {
-        echo "Building..."
-        openshiftBuild bldCfg: 'news-proxy-develop', showBuildLogs: 'true'
-        openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'news-proxy', srcTag: 'latest'
+        openshift.withCluster() {
+                    openshift.withProject() {
+                        echo "building..."
+			def bc = openshift.selector('bc', 'news-proxy-develop')
+			def buildSelector = bc.startBuild()
+			openshift.tag("news-proxy-develop:latest", "news-proxy:dev")
+			openshift.tag("news-proxy-develop:latest", "news-proxy:test")
+                    }
+                }
     }
-	
+
+
     stage('Deploy on Dev') {
-        echo "Deploying to dev..."
-        openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: 'dev', srcStream: 'news-proxy', srcTag: '$BUILD_ID'
-    }
-}
+		openshift.withCluster() {
+                    openshift.withProject("47ba99-dev") {
+		    	echo "Deploying to dev..."
+			openshift.selector("dc", "news-proxy").rollout().latest()
+		     }
+		}
+	}
 
-stage('Deploy on Test') {
-    input "Deploy to test?"
-    node('master') {
-        openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: 'test', srcStream: 'news-proxy', srcTag: '$BUILD_ID'
-    }
+	stage('Deploy on Test') {
+    		input "Deploy to test?"
+		openshift.withCluster() {
+                    openshift.withProject("47ba99-test") {
+			openshift.selector("dc", "news-proxy").rollout().latest()
+		     }
+		}
+	}
 }
-
