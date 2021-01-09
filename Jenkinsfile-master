@@ -1,22 +1,23 @@
 node('master') {
-/*
-    stage('Code Quality') {
-        echo "Running SonarQube static code analysis on master branch."
-        openshiftBuild bldCfg: 'news-proxy-sonar-master', showBuildLogs: 'true'
-    }*/
 
     stage('Build Image') {
-        echo "Building..."
-        openshiftBuild bldCfg: 'news-proxy-master', showBuildLogs: 'true'
-        openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'news-proxy', srcTag: 'latest'
-		openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: 'test', srcStream: 'news-proxy', srcTag: '$BUILD_ID'
-    }	
-}
+        openshift.withCluster() {
+                    openshift.withProject() {
+                        echo "building..."
+			def bc = openshift.selector('bc', 'news-proxy-master')
+			def buildSelector = bc.startBuild()
+			openshift.tag("news-proxy-master:latest", "news-proxy:prod")
+                    }
+                }
+    }
 
 stage('Deploy on Prod') {
-    input "Deploy to Prod?"
-    node('master') {
-        openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: 'prod', srcStream: 'news-proxy', srcTag: '$BUILD_ID'
-    }
-}
+    		input "Deploy to prod?"
+		openshift.withCluster() {
+                    openshift.withProject("47ba99-prod") {
+			openshift.selector("dc", "news-proxy").rollout().latest()
+		     }
+		}
+	}
 
+}
