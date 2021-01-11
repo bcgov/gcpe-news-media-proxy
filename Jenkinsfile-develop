@@ -12,7 +12,6 @@ node('master') {
                 }
     }
 
-
     stage('Deploy on Dev') {
 		openshift.withCluster() {
                     openshift.withProject("47ba99-dev") {
