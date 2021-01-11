@@ -1,5 +1,5 @@
 node('master') {
-    /*
+   /*
     stage('Code Quality') {
         echo "Running SonarQube static code analysis on master branch."
         openshiftBuild bldCfg: 'news-proxy-sonar-master', showBuildLogs: 'true'
