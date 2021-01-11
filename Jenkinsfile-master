@@ -19,4 +19,3 @@ stage('Deploy on Prod') {
         openshiftTag destStream: 'news-proxy', verbose: 'true', destTag: 'prod', srcStream: 'news-proxy', srcTag: '$BUILD_ID'
     }
 }
-
