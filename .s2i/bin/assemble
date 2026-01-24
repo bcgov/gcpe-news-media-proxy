@@ -2,9 +2,6 @@
 
 set -e
 
-echo "---> Ensuring CA trust bundle is generated"
-update-ca-trust extract
-
 # npm
 if [ -n "${DOTNET_NPM_TOOLS}" ]; then
   echo "---> Installing npm tools ..."
